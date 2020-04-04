@@ -120,6 +120,15 @@ const blockQuery = `
         }
         operation { ... operationInfo }
     }
+    double_endorsement_evidence {
+        kind
+        op1 { ... inlinedEndorsement }
+        op2 { ... inlinedEndorsement }
+        metadata {
+            balance_updates { ... operationMetadataBalanceUpdates }
+        }
+        operation { ... operationInfo }
+    }
 }`;
 
 const fragments = `
@@ -176,7 +185,16 @@ fragment balanceUpdates on OperationBalanceUpdates {
     cycle
     change
 }
-`;
+
+fragment inlinedEndorsement on InlinedEndorsement {
+    branch
+    operations {
+        kind
+        level
+        operation { ... operationInfo }
+    }
+    signature
+}`;
 
 describe('GraphQL server', () => {
     beforeEach(() => {
