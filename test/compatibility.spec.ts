@@ -129,6 +129,16 @@ const blockQuery = `
         }
         operation { ... operationInfo }
     }
+    endorsements {
+        kind
+        level
+        metadata {
+            balance_updates { ... operationMetadataBalanceUpdates }
+            delegate
+            slots
+        }
+        operation { ... operationInfo }
+    }
 }`;
 
 const fragments = `
