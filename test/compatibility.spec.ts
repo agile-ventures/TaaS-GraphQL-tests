@@ -5,20 +5,7 @@ const blockQuery = `
     protocol
     chain_id
     hash
-    header {
-        level
-        proto
-        predecessor
-        timestamp
-        validation_pass
-        operations_hash
-        fitness
-        context
-        priority
-        proof_of_work_nonce
-        seed_nonce_hash
-        signature
-    }
+    header { ... blockFullHeader }
     metadata {
         protocol
         next_protocol
@@ -44,14 +31,7 @@ const blockQuery = `
         }
         voting_period_kind
         consumed_gas
-        balance_updates {
-            kind
-            category
-            delegate
-            cycle
-            contract
-            change
-        }
+        balance_updates { ... balanceUpdates }
     }
     operations {
         protocol
@@ -60,13 +40,7 @@ const blockQuery = `
         branch
         contents {
             kind
-            operation {
-                protocol
-                chain_id
-                hash
-                branch
-                signature
-            }
+            operation { ... operationInfo }
         }
         signature
     }
@@ -75,14 +49,7 @@ const blockQuery = `
         pkh
         secret
         metadata {
-            balance_updates {
-                kind
-                category
-                contract
-                delegate
-                cycle
-                change
-            }
+            balance_updates { ... operationMetadataBalanceUpdates }
         }
         parent { ... operationInfo }
         operation { ... operationInfo }
@@ -104,14 +71,7 @@ const blockQuery = `
         storage_limit
         delegate
         metadata {
-            balance_updates {
-                kind
-                category
-                contract
-                delegate
-                cycle
-                change
-            }
+            balance_updates { ... operationMetadataBalanceUpdates }
             operation_result {
                 status
                 consumed_gas
@@ -151,6 +111,15 @@ const blockQuery = `
         }
         operation { ... operationInfo }
     }
+    double_baking_evidence {
+        kind
+        bh1 { ... blockFullHeader }
+        bh2 { ... blockFullHeader }
+        metadata {
+            balance_updates { ... operationMetadataBalanceUpdates }
+        }
+        operation { ... operationInfo }
+    }
 }`;
 
 const fragments = `
@@ -174,6 +143,39 @@ fragment operationInfo on OperationEntry {
     branch
     signature
 }
+
+fragment blockFullHeader on BlockFullHeader {
+    level
+    proto
+    predecessor
+    timestamp
+    validation_pass
+    operations_hash
+    fitness
+    context
+    priority
+    proof_of_work_nonce
+    seed_nonce_hash
+    signature
+}
+
+fragment operationMetadataBalanceUpdates on OperationMetadataBalanceUpdates {
+    kind
+    category
+    contract
+    delegate
+    cycle
+    change
+}
+
+fragment balanceUpdates on OperationBalanceUpdates {
+    kind
+    category
+    contract
+    delegate
+    cycle
+    change
+}
 `;
 
 describe('GraphQL server', () => {
@@ -185,9 +187,12 @@ describe('GraphQL server', () => {
     it('returns OK for block', async () => {
         var response = await axios.post('http://localhost:3000/graphql', {
             query: `{ block(block: "head") ${blockQuery} } ${fragments}`
-        });
+        }, { validateStatus: () => true });
 
-        expect(response.status).toBe(200);
+        if (response.status != 200) {
+            fail(`Returned ${response.status} ${response.statusText}`)
+        }
+
         expect(response.data.errors).toBeUndefined();
         if (response.data.errors) {
             console.debug(response.data.errors);
