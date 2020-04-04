@@ -53,9 +53,74 @@ const blockQuery = `
             change
         }
     }
+    operations {
+        protocol
+        chain_id
+        hash
+        branch
+        contents {
+            kind
+            operation {
+                protocol
+                chain_id
+                hash
+                branch
+                signature
+            }
+        }
+        signature
+    }
+    activations {
+        kind
+        pkh
+        secret
+        metadata {
+            balance_updates {
+                kind
+                category
+                contract
+                delegate
+                cycle
+                change
+            }
+        }
+        parent {
+            protocol
+            chain_id
+            hash
+            branch
+            signature
+        }
+        operation {
+            protocol
+            chain_id
+            hash
+            branch
+            signature
+        }
+    }
+    ballots {
+        kind
+        source
+        period
+        proposal
+        ballot
+        operation {
+            protocol
+            chain_id
+            hash
+            branch
+            signature
+        }
+    }
 }`;
 
 describe('GraphQL server', () => {
+    beforeEach(() => {
+        // 60s timeout for each test
+        jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
+    });
+
     it('returns OK for block', async () => {
         var response = await axios.post('http://localhost:3000/graphql', {
             query: `{ block(block: "head") ${blockQuery} }`
