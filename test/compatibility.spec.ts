@@ -84,20 +84,8 @@ const blockQuery = `
                 change
             }
         }
-        parent {
-            protocol
-            chain_id
-            hash
-            branch
-            signature
-        }
-        operation {
-            protocol
-            chain_id
-            hash
-            branch
-            signature
-        }
+        parent { ... operationInfo }
+        operation { ... operationInfo }
     }
     ballots {
         kind
@@ -105,15 +93,88 @@ const blockQuery = `
         period
         proposal
         ballot
-        operation {
-            protocol
-            chain_id
-            hash
-            branch
-            signature
+        operation { ... operationInfo }
+    }
+    delegations {
+        kind
+        source
+        fee
+        counter
+        gas_limit
+        storage_limit
+        delegate
+        metadata {
+            balance_updates {
+                kind
+                category
+                contract
+                delegate
+                cycle
+                change
+            }
+            operation_result {
+                status
+                consumed_gas
+                errors {
+                    kind
+                    id
+                }
+            }
+            internal_operation_results {
+                kind
+                info {
+                    source
+                    nonce
+                    amount
+                    destination
+                    parameters {
+                        entrypoint
+                        value { ... michelsonExpr }
+                    }
+                    public_key
+                    balance
+                    delegate
+                    script {
+                        code { ... michelsonExpr }
+                        storage { ... michelsonExpr }
+                    }
+                }
+                result {
+                    status
+                    consumed_gas
+                    errors {
+                        kind
+                        id
+                    }
+                }
+            }
         }
+        operation { ... operationInfo }
     }
 }`;
+
+const fragments = `
+fragment michelsonExpr on MichelsonV1Expression {
+    ... on MichelsonV1ExpressionBase {
+        int
+        String
+        bytes
+    }
+    ... on MichelsonV1ExpressionExtended {
+        prim
+        annots
+        # skip args to avoid exceeding max depth
+    }
+}
+
+fragment operationInfo on OperationEntry {
+    protocol
+    chain_id
+    hash
+    branch
+    signature
+}
+`;
 
 describe('GraphQL server', () => {
     beforeEach(() => {
@@ -123,7 +184,7 @@ describe('GraphQL server', () => {
 
     it('returns OK for block', async () => {
         var response = await axios.post('http://localhost:3000/graphql', {
-            query: `{ block(block: "head") ${blockQuery} }`
+            query: `{ block(block: "head") ${blockQuery} } ${fragments}`
         });
 
         expect(response.status).toBe(200);
