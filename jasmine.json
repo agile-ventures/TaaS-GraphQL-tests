@@ -6,5 +6,6 @@
     "helpers": [
         "../node_modules/ts-node/register/type-check.js"
     ],
-    "stopSpecOnExpectationFailure": false
+    "stopSpecOnExpectationFailure": false,
+    "random": false
 }
