@@ -139,6 +139,48 @@ const blockQuery = `
         }
         operation { ... operationInfo }
     }
+    originations {
+        kind
+        source
+        fee
+        counter
+        gas_limit
+        storage_limit
+        balance
+        delegate
+        script {
+            code { ... michelsonExpr }
+            storage { ... michelsonExpr }
+        }
+        metadata {
+            balance_updates { ... operationMetadataBalanceUpdates }
+            operation_result { ... operationResultOrigination }
+            internal_operation_results {
+                kind
+                info {
+                    source
+                    nonce
+                    amount
+                    destination
+                    parameters {
+                        # TODO fragment
+                        entrypoint
+                        value { ... michelsonExpr }
+                    }
+                    public_key
+                    balance
+                    delegate
+                    script {
+                        # TODO fragment
+                        code { ... michelsonExpr }
+                        storage { ... michelsonExpr }
+                    }
+                }
+                result { ... operationResultOrigination }
+            }
+        }
+        operation { ... operationInfo }
+    }
 }`;
 
 const fragments = `
@@ -204,6 +246,19 @@ fragment inlinedEndorsement on InlinedEndorsement {
         operation { ... operationInfo }
     }
     signature
+}
+
+fragment operationResultOrigination on OperationResultOrigination {
+    status
+    consumed_gas
+    errors {
+        kind
+        id
+    }
+    balance_updates  { ... balanceUpdates }
+    originated_contracts
+    storage_size
+    paid_storage_size_diff
 }`;
 
 describe('GraphQL server', () => {
