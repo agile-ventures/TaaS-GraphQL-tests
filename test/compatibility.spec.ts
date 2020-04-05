@@ -87,17 +87,11 @@ const blockQuery = `
                     nonce
                     amount
                     destination
-                    parameters {
-                        entrypoint
-                        value { ... michelsonExpr }
-                    }
+                    parameters { ... parameters }
                     public_key
                     balance
                     delegate
-                    script {
-                        code { ... michelsonExpr }
-                        storage { ... michelsonExpr }
-                    }
+                    script { ... scriptedContract }
                 }
                 result {
                     status
@@ -162,23 +156,22 @@ const blockQuery = `
                     nonce
                     amount
                     destination
-                    parameters {
-                        # TODO fragment
-                        entrypoint
-                        value { ... michelsonExpr }
-                    }
+                    parameters { ... parameters }
                     public_key
                     balance
                     delegate
-                    script {
-                        # TODO fragment
-                        code { ... michelsonExpr }
-                        storage { ... michelsonExpr }
-                    }
+                    script { ... scriptedContract }
                 }
                 result { ... operationResultOrigination }
             }
         }
+        operation { ... operationInfo }
+    }
+    proposals { # [OperationContentsProposal]!
+        kind
+        source
+        period
+        proposals
         operation { ... operationInfo }
     }
 }`;
@@ -259,6 +252,16 @@ fragment operationResultOrigination on OperationResultOrigination {
     originated_contracts
     storage_size
     paid_storage_size_diff
+}
+
+fragment parameters on TransactionOperationParameter {
+    entrypoint
+    value { ... michelsonExpr }
+}
+
+fragment scriptedContract on ScriptedContracts {
+    code { ... michelsonExpr }
+    storage { ... michelsonExpr }
 }`;
 
 describe('GraphQL server', () => {
