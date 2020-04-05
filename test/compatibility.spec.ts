@@ -212,6 +212,37 @@ const blockQuery = `
         }
         operation { ... operationInfo }
     }
+    transactions { # [OperationContentsTransaction]!
+        kind
+        source
+        fee
+        counter
+        gas_limit
+        storage_limit
+        amount
+        destination
+        parameters { ... michelsonExpr }
+        metadata { # OperationContentsMetadataTransaction!
+            balance_updates { ... operationMetadataBalanceUpdates }
+            operation_result { ... operationResultTransaction }
+            internal_operation_results { # [InternalOperationResultTransaction]
+                kind
+                info {
+                    source
+                    nonce
+                    amount
+                    destination
+                    parameters { ... parameters }
+                    public_key
+                    balance
+                    delegate
+                    script { ... scriptedContract }
+                }
+                result { ... operationResultTransaction }
+            }
+        }
+        operation { ... operationInfo }
+    }
 }`;
 
 const fragments = `
@@ -309,6 +340,34 @@ fragment operationResultReveal on OperationResultReveal {
         kind
         id
     }
+}
+
+fragment operationResultTransaction on OperationResultTransaction {
+    status
+    consumed_gas
+    errors {
+        kind
+        id
+    }
+    storage_base {
+        int
+        String
+        bytes
+    }
+    storage_extended {
+        prim
+        annots
+    }
+    big_map_diff { # [ContractBigMapDiffItem]
+        key_hash
+        key { ... michelsonExpr }
+        value { ... michelsonExpr }
+    }
+    balance_updates { ... balanceUpdates }
+    originated_contracts
+    storage_size
+    paid_storage_size_diff
+    allocated_destination_contract
 }
 
 `;
