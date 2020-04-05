@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { stringify } from 'querystring';
 
 const blockQuery = `
 {
@@ -51,7 +52,6 @@ const blockQuery = `
         metadata {
             balance_updates { ... operationMetadataBalanceUpdates }
         }
-        parent { ... operationInfo }
         operation { ... operationInfo }
     }
     ballots {
@@ -378,9 +378,9 @@ describe('GraphQL server', () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
     });
 
-    it('returns OK for block', async () => {
+    async function testBlock(block: string) {
         var response = await axios.post('http://localhost:3000/graphql', {
-            query: `{ block(block: "head") ${blockQuery} } ${fragments}`
+            query: `{ block(block: "${block}") ${blockQuery} } ${fragments}`
         }, { validateStatus: () => true });
 
         if (response.status != 200) {
@@ -391,5 +391,17 @@ describe('GraphQL server', () => {
         if (response.data.errors) {
             console.debug(response.data.errors);
         }
-    });
+    }
+
+    function itReturnsOkForBlock(block: string, description: string) {
+        it(`returns OK for ${block} (${description})`, async () => testBlock(block));
+    }
+
+    itReturnsOkForBlock('896621', '006');
+    itReturnsOkForBlock('896065', '006');
+    itReturnsOkForBlock('696617', '005');
+    itReturnsOkForBlock('379', '001');
+    itReturnsOkForBlock('2', '001');
+    // itReturnsOkForBlock('1', '000');
+    // itReturnsOkForBlock('0', 'Genesis');
 });
