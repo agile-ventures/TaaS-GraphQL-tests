@@ -174,6 +174,44 @@ const blockQuery = `
         proposals
         operation { ... operationInfo }
     }
+    reveals { # [OperationContentsReveal]!
+        kind
+        source
+        fee
+        counter
+        gas_limit
+        storage_limit
+        public_key
+        metadata { # OperationContentsMetadataReveal!
+            balance_updates { ... operationMetadataBalanceUpdates }
+            internal_operation_results { # [InternalOperationResultReveal]
+                kind
+                info { # InternalOperationResultInfo
+                    source
+                    nonce
+                    amount
+                    destination
+                    parameters { ... parameters }
+                    public_key
+                    balance
+                    delegate
+                    script { ... scriptedContract }
+                }
+                result { ... operationResultReveal }
+            }
+            operation_result { ... operationResultReveal }
+        }
+        operation { ... operationInfo }
+    }
+    seed_nonce_revelations { # [OperationContentsSeedNonceRevelation]!
+        kind
+        level
+        nonce
+        metadata { # OperationContentsMetadata!
+            balance_updates { ... operationMetadataBalanceUpdates }
+        }
+        operation { ... operationInfo }
+    }
 }`;
 
 const fragments = `
@@ -262,7 +300,18 @@ fragment parameters on TransactionOperationParameter {
 fragment scriptedContract on ScriptedContracts {
     code { ... michelsonExpr }
     storage { ... michelsonExpr }
-}`;
+}
+
+fragment operationResultReveal on OperationResultReveal {
+    status
+    consumed_gas
+    errors {
+        kind
+        id
+    }
+}
+
+`;
 
 describe('GraphQL server', () => {
     beforeEach(() => {
