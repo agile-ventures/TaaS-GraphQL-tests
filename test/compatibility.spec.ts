@@ -397,11 +397,28 @@ describe('GraphQL server', () => {
         it(`returns OK for ${block} (${description})`, async () => testBlock(block));
     }
 
-    itReturnsOkForBlock('896621', '006');
-    itReturnsOkForBlock('896065', '006');
-    itReturnsOkForBlock('696617', '005');
-    itReturnsOkForBlock('379', '001');
-    itReturnsOkForBlock('2', '001');
-    // itReturnsOkForBlock('1', '000');
-    // itReturnsOkForBlock('0', 'Genesis');
+    describe('on recent data', () => {
+        itReturnsOkForBlock('896621', '006');
+    });
+
+    describe('on starting blocks', () => {
+        itReturnsOkForBlock('851969', '006');
+        itReturnsOkForBlock('655361', '005');
+        itReturnsOkForBlock('458753', '004');
+        itReturnsOkForBlock('204762', '003');
+        itReturnsOkForBlock('2', '001');
+        // itReturnsOkForBlock('1', '000');
+        // itReturnsOkForBlock('0', 'Genesis');
+    });
+
+    describe('on operation sample', () => {
+        itReturnsOkForBlock('896065', '006');
+        itReturnsOkForBlock('696617', '005');
+        itReturnsOkForBlock('554813', '004');
+        itReturnsOkForBlock('32959', '002');
+        itReturnsOkForBlock('28083', '002');
+        itReturnsOkForBlock('3425', '001');
+        itReturnsOkForBlock('446', '001');
+        itReturnsOkForBlock('379', '001');
+    });
 });
