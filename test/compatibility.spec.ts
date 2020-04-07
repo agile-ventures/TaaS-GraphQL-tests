@@ -268,6 +268,12 @@ const blockQuery = `
         entrypoint {
           entrypoints
         }
+        manager_key {
+            key
+            invalid
+        }
+        storage { ... michelsonExpr }
+        delegate
     }
 }`;
 
