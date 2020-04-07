@@ -1,5 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
-import { stringify } from 'querystring';
+import axios from "axios";
 
 const blockQuery = `
 {
@@ -243,6 +242,33 @@ const blockQuery = `
         }
         operation { ... operationInfo }
     }
+    delegate(address: "tz1LcuQHNVQEWP2fZjk1QYZGNrfLDwrT3SyZ") {
+        balance
+        frozen_balance
+        staking_balance
+        delegated_contracts
+        delegated_balance
+        deactivated
+        grace_period
+        frozen_balance_by_cycle {
+            cycle
+            deposit
+            fees
+            rewards
+        }
+
+    }
+    contract(address: "KT1EctCuorV2NfVb1XTQgvzJ88MQtWP8cMMv") {
+        balance
+        script {
+            code { ... michelsonExpr }
+            storage { ... michelsonExpr }
+        }
+        counter
+        entrypoint {
+          entrypoints
+        }
+    }
 }`;
 
 const fragments = `
@@ -372,53 +398,58 @@ fragment operationResultTransaction on OperationResultTransaction {
 
 `;
 
-describe('GraphQL server', () => {
-    beforeEach(() => {
-        // 60s timeout for each test
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
-    });
+describe("GraphQL server", () => {
+  beforeEach(() => {
+    // 60s timeout for each test
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
+  });
 
-    async function testBlock(block: string) {
-        var response = await axios.post('http://localhost:3000/graphql', {
-            query: `{ block(block: "${block}") ${blockQuery} } ${fragments}`
-        }, { validateStatus: () => true });
+  async function testBlock(block: string) {
+    var response = await axios.post(
+      "http://localhost:3000/graphql",
+      {
+        query: `{ block(block: "${block}") ${blockQuery} } ${fragments}`,
+      },
+      { validateStatus: () => true }
+    );
 
-        if (response.status != 200) {
-            fail(`Returned ${response.status} ${response.statusText}`)
-        }
-
-        expect(response.data.errors).toBeUndefined();
-        if (response.data.errors) {
-            console.debug(response.data.errors);
-        }
+    if (response.status != 200) {
+      fail(`Returned ${response.status} ${response.statusText}`);
     }
 
-    function itReturnsOkForBlock(block: string, description: string) {
-        it(`returns OK for ${block} (${description})`, async () => testBlock(block));
+    expect(response.data.errors).toBeUndefined();
+    if (response.data.errors) {
+      console.debug(response.data.errors);
     }
+  }
 
-    describe('on recent data', () => {
-        itReturnsOkForBlock('896621', '006');
-    });
+  function itReturnsOkForBlock(block: string, description: string) {
+    it(`returns OK for ${block} (${description})`, async () =>
+      testBlock(block));
+  }
 
-    describe('on starting blocks', () => {
-        itReturnsOkForBlock('851969', '006');
-        itReturnsOkForBlock('655361', '005');
-        itReturnsOkForBlock('458753', '004');
-        itReturnsOkForBlock('204762', '003');
-        itReturnsOkForBlock('2', '001');
-        // itReturnsOkForBlock('1', '000');
-        // itReturnsOkForBlock('0', 'Genesis');
-    });
+  describe("on recent data", () => {
+    itReturnsOkForBlock("896621", "006");
+  });
 
-    describe('on operation sample', () => {
-        itReturnsOkForBlock('896065', '006');
-        itReturnsOkForBlock('696617', '005');
-        itReturnsOkForBlock('554813', '004');
-        itReturnsOkForBlock('32959', '002');
-        itReturnsOkForBlock('28083', '002');
-        itReturnsOkForBlock('3425', '001');
-        itReturnsOkForBlock('446', '001');
-        itReturnsOkForBlock('379', '001');
-    });
+  describe("on starting blocks", () => {
+    itReturnsOkForBlock("851969", "006");
+    itReturnsOkForBlock("655361", "005");
+    itReturnsOkForBlock("458753", "004");
+    itReturnsOkForBlock("204762", "003");
+    itReturnsOkForBlock("2", "001");
+    // itReturnsOkForBlock('1', '000');
+    // itReturnsOkForBlock('0', 'Genesis');
+  });
+
+  describe("on operation sample", () => {
+    itReturnsOkForBlock("896065", "006");
+    itReturnsOkForBlock("696617", "005");
+    itReturnsOkForBlock("554813", "004");
+    itReturnsOkForBlock("32959", "002");
+    itReturnsOkForBlock("28083", "002");
+    itReturnsOkForBlock("3425", "001");
+    itReturnsOkForBlock("446", "001");
+    itReturnsOkForBlock("379", "001");
+  });
 });
