@@ -409,8 +409,11 @@ describe('GraphQL server', () => {
         itReturnsOkForBlock('204762', '003');
         itReturnsOkForBlock('28083', '002');
         itReturnsOkForBlock('2', '001');
-        // itReturnsOkForBlock('1', '000');
-        // itReturnsOkForBlock('0', 'Genesis');
+    });
+
+    xdescribe('on starting blocks', () => {
+        itReturnsOkForBlock('1', '000');
+        itReturnsOkForBlock('0', 'Genesis');
     });
 
     describe('on operation sample', () => {
