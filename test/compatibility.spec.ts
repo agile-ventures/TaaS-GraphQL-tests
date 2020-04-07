@@ -35,15 +35,11 @@ const blockQuery = `
         balance_updates { ... balanceUpdates }
     }
     operations {
-        protocol
-        chain_id
-        hash
-        branch
+        info { ... operationInfo }
         contents {
             kind
             operation { ... operationInfo }
         }
-        signature
     }
     activations {
         kind
@@ -259,7 +255,7 @@ fragment michelsonExpr on MichelsonV1Expression {
     }
 }
 
-fragment operationInfo on OperationEntry {
+fragment operationInfo on OperationEntryInfo {
     protocol
     chain_id
     hash
@@ -305,7 +301,6 @@ fragment inlinedEndorsement on InlinedEndorsement {
     operations {
         kind
         level
-        operation { ... operationInfo }
     }
     signature
 }
