@@ -398,6 +398,7 @@ describe('GraphQL server', () => {
     }
 
     describe('on recent data', () => {
+        itReturnsOkForBlock('head', 'latest protocol');
         itReturnsOkForBlock('896621', '006');
     });
 
@@ -406,6 +407,7 @@ describe('GraphQL server', () => {
         itReturnsOkForBlock('655361', '005');
         itReturnsOkForBlock('458753', '004');
         itReturnsOkForBlock('204762', '003');
+        itReturnsOkForBlock('28083', '002');
         itReturnsOkForBlock('2', '001');
         // itReturnsOkForBlock('1', '000');
         // itReturnsOkForBlock('0', 'Genesis');
