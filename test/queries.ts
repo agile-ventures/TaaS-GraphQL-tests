@@ -4,7 +4,7 @@ export const blockFields = `
     protocol
     chain_id
     hash
-    header { ... blockFullHeader }
+    header { ... blockHeader }
     metadata {
         protocol
         next_protocol
@@ -101,8 +101,8 @@ export const blockFields = `
     }
     double_baking_evidence {
         kind
-        bh1 { ... blockFullHeader }
-        bh2 { ... blockFullHeader }
+        bh1 { ... blockHeader }
+        bh2 { ... blockHeader }
         metadata {
             balance_updates { ... operationMetadataBalanceUpdates }
         }
@@ -261,7 +261,7 @@ fragment operationInfo on OperationEntryInfo {
     signature
 }
 
-fragment blockFullHeader on BlockFullHeader {
+fragment blockHeader on BlockHeader {
     level
     proto
     predecessor
