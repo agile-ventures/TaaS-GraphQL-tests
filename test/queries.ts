@@ -29,8 +29,10 @@ export const blockFields = `
             expected_commitment
         }
         voting_period_kind
+        nonce_hash
         consumed_gas
-        balance_updates { ... balanceUpdates }
+        deactivated
+        balance_updates { ... balanceUpdate }
     }
     operations {
         info { ... operationInfo }
@@ -285,7 +287,7 @@ fragment operationMetadataBalanceUpdates on OperationMetadataBalanceUpdates {
     change
 }
 
-fragment balanceUpdates on OperationBalanceUpdates {
+fragment balanceUpdate on OperationBalanceUpdate {
     kind
     category
     contract
@@ -310,7 +312,7 @@ fragment operationResultOrigination on OperationResultOrigination {
         kind
         id
     }
-    balance_updates  { ... balanceUpdates }
+    balance_updates  { ... balanceUpdate }
     originated_contracts
     storage_size
     paid_storage_size_diff
@@ -356,7 +358,7 @@ fragment operationResultTransaction on OperationResultTransaction {
         key { ... michelsonExpr }
         value { ... michelsonExpr }
     }
-    balance_updates { ... balanceUpdates }
+    balance_updates { ... balanceUpdate }
     originated_contracts
     storage_size
     paid_storage_size_diff
