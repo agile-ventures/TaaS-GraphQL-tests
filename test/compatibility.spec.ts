@@ -1,8 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { stringify } from "querystring";
 
-const blockQuery = `
-{
+const blockFields = `
     protocol
     chain_id
     hash
@@ -239,40 +238,7 @@ const blockQuery = `
         }
         operation { ... operationInfo }
     }
-    delegate(address: "tz1LcuQHNVQEWP2fZjk1QYZGNrfLDwrT3SyZ") {
-        balance
-        frozen_balance
-        staking_balance
-        delegated_contracts
-        delegated_balance
-        deactivated
-        grace_period
-        frozen_balance_by_cycle {
-            cycle
-            deposit
-            fees
-            rewards
-        }
-
-    }
-    contract(address: "KT1NqqfyF4TinkrKBKcZmXE5UMRtUFpL6p76") {
-        balance
-        script {
-            code { ... michelsonExpr }
-            storage { ... michelsonExpr }
-        }
-        counter
-        entrypoint {
-          entrypoints
-        }
-        manager_key {
-            key
-            invalid
-        }
-        storage { ... michelsonExpr }
-        delegate
-    }
-}`;
+`;
 
 const fragments = `
 fragment michelsonExpr on MichelsonV1Expression {
@@ -397,8 +363,41 @@ fragment operationResultTransaction on OperationResultTransaction {
     paid_storage_size_diff
     allocated_destination_contract
 }
-
 `;
+
+const contractField = `contract(address: "KT1MsoUy2Sunt5rBbvRGxKf2zDxHE9teRJw7") {
+    balance
+    script {
+        code { ... michelsonExpr }
+        storage { ... michelsonExpr }
+    }
+    counter
+    entrypoint {
+    entrypoints
+    }
+    manager_key {
+        key
+        invalid
+    }
+    storage { ... michelsonExpr }
+    delegate
+}`;
+
+const delegateField = `delegate(address: "tz1LcuQHNVQEWP2fZjk1QYZGNrfLDwrT3SyZ") {
+    balance
+    frozen_balance
+    staking_balance
+    delegated_contracts
+    delegated_balance
+    deactivated
+    grace_period
+    frozen_balance_by_cycle {
+        cycle
+        deposit
+        fees
+        rewards
+    }
+}`;
 
 describe("GraphQL server", () => {
     beforeEach(() => {
@@ -406,11 +405,11 @@ describe("GraphQL server", () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
     });
 
-    async function testBlock(block: string) {
+    async function testBlock(block: string, additionalBlockFields: string[] = []) {
         var response = await axios.post(
             "http://localhost:3000/graphql",
             {
-                query: `{ block(block: "${block}") ${blockQuery} } ${fragments}`,
+                query: `{ block(block: "${block}") { ${blockFields} ${additionalBlockFields.join(" ")} } } ${fragments}`,
             },
             { validateStatus: () => true }
         );
@@ -425,13 +424,13 @@ describe("GraphQL server", () => {
         }
     }
 
-    function itReturnsOkForBlock(block: string, description: string) {
-        it(`returns OK for ${block} (${description})`, async () => testBlock(block));
+    function itReturnsOkForBlock(block: string, description: string, additionalBlockFields: string[] = []) {
+        it(`returns OK for ${block} (${description})`, async () => testBlock(block, additionalBlockFields));
     }
 
     describe("on recent data", () => {
-        itReturnsOkForBlock("head", "latest protocol");
-        itReturnsOkForBlock("896621", "006");
+        itReturnsOkForBlock("head", "latest protocol", [contractField, delegateField]);
+        itReturnsOkForBlock("896621", "006", [contractField, delegateField]);
     });
 
     describe("on starting blocks", () => {
@@ -449,12 +448,11 @@ describe("GraphQL server", () => {
     });
 
     describe("on operation sample", () => {
-        itReturnsOkForBlock("896065", "006");
-        itReturnsOkForBlock("696617", "005");
-        itReturnsOkForBlock("554813", "004");
-        itReturnsOkForBlock("32959", "002");
-        itReturnsOkForBlock("28083", "002");
-        itReturnsOkForBlock("3425", "001");
+        itReturnsOkForBlock("896065", "006", [contractField, delegateField]);
+        itReturnsOkForBlock("696617", "005", [contractField, delegateField]);
+        itReturnsOkForBlock("554813", "004", [contractField, delegateField]);
+        itReturnsOkForBlock("32959", "002", [contractField]);
+        itReturnsOkForBlock("3425", "001", [contractField]);
         itReturnsOkForBlock("446", "001");
         itReturnsOkForBlock("379", "001");
     });
