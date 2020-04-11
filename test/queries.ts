@@ -46,7 +46,7 @@ export const blockFields = `
         pkh
         secret
         metadata {
-            balance_updates { ... operationMetadataBalanceUpdates }
+            balance_updates { ... balanceUpdate }
         }
         operation { ... operationInfo }
     }
@@ -67,7 +67,7 @@ export const blockFields = `
         storage_limit
         delegate
         metadata {
-            balance_updates { ... operationMetadataBalanceUpdates }
+            balance_updates { ... balanceUpdate }
             operation_result {
                 status
                 consumed_gas
@@ -106,7 +106,7 @@ export const blockFields = `
         bh1 { ... blockHeader }
         bh2 { ... blockHeader }
         metadata {
-            balance_updates { ... operationMetadataBalanceUpdates }
+            balance_updates { ... balanceUpdate }
         }
         operation { ... operationInfo }
     }
@@ -115,7 +115,7 @@ export const blockFields = `
         op1 { ... inlinedEndorsement }
         op2 { ... inlinedEndorsement }
         metadata {
-            balance_updates { ... operationMetadataBalanceUpdates }
+            balance_updates { ... balanceUpdate }
         }
         operation { ... operationInfo }
     }
@@ -123,7 +123,7 @@ export const blockFields = `
         kind
         level
         metadata {
-            balance_updates { ... operationMetadataBalanceUpdates }
+            balance_updates { ... balanceUpdate }
             delegate
             slots
         }
@@ -143,7 +143,7 @@ export const blockFields = `
             storage
         }
         metadata {
-            balance_updates { ... operationMetadataBalanceUpdates }
+            balance_updates { ... balanceUpdate }
             operation_result { ... operationResultOrigination }
             internal_operation_results {
                 kind
@@ -179,7 +179,7 @@ export const blockFields = `
         storage_limit
         public_key
         metadata { # OperationContentsMetadataReveal!
-            balance_updates { ... operationMetadataBalanceUpdates }
+            balance_updates { ... balanceUpdate }
             internal_operation_results { # [InternalOperationResultReveal]
                 kind
                 info { # InternalOperationResultInfo
@@ -204,7 +204,7 @@ export const blockFields = `
         level
         nonce
         metadata { # OperationContentsMetadata!
-            balance_updates { ... operationMetadataBalanceUpdates }
+            balance_updates { ... balanceUpdate }
         }
         operation { ... operationInfo }
     }
@@ -219,7 +219,7 @@ export const blockFields = `
         destination
         parameters
         metadata { # OperationContentsMetadataTransaction!
-            balance_updates { ... operationMetadataBalanceUpdates }
+            balance_updates { ... balanceUpdate }
             operation_result { ... operationResultTransaction }
             internal_operation_results { # [InternalOperationResultTransaction]
                 kind
@@ -265,16 +265,7 @@ fragment blockHeader on BlockHeader {
     signature
 }
 
-fragment operationMetadataBalanceUpdates on OperationMetadataBalanceUpdates {
-    kind
-    category
-    contract
-    delegate
-    cycle
-    change
-}
-
-fragment balanceUpdate on OperationBalanceUpdate {
+fragment balanceUpdate on BalanceUpdate {
     kind
     category
     contract
