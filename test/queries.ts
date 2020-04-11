@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from 'axios';
 
 export const blockFields = `
     protocol
@@ -139,8 +139,8 @@ export const blockFields = `
         balance
         delegate
         script {
-            code { ... michelsonExpr }
-            storage { ... michelsonExpr }
+            code
+            storage
         }
         metadata {
             balance_updates { ... operationMetadataBalanceUpdates }
@@ -217,7 +217,7 @@ export const blockFields = `
         storage_limit
         amount
         destination
-        parameters { ... michelsonExpr }
+        parameters
         metadata { # OperationContentsMetadataTransaction!
             balance_updates { ... operationMetadataBalanceUpdates }
             operation_result { ... operationResultTransaction }
@@ -242,19 +242,6 @@ export const blockFields = `
 `;
 
 export const fragments = `
-fragment michelsonExpr on MichelsonV1Expression {
-    ... on MichelsonV1ExpressionBase {
-        int
-        String
-        bytes
-    }
-    ... on MichelsonV1ExpressionExtended {
-        prim
-        annots
-        # skip args to avoid exceeding max depth
-    }
-}
-
 fragment operationInfo on OperationEntryInfo {
     protocol
     chain_id
@@ -320,12 +307,12 @@ fragment operationResultOrigination on OperationResultOrigination {
 
 fragment parameters on TransactionOperationParameter {
     entrypoint
-    value { ... michelsonExpr }
+    value
 }
 
 fragment scriptedContract on ScriptedContracts {
-    code { ... michelsonExpr }
-    storage { ... michelsonExpr }
+    code
+    storage
 }
 
 fragment operationResultReveal on OperationResultReveal {
@@ -344,19 +331,12 @@ fragment operationResultTransaction on OperationResultTransaction {
         kind
         id
     }
-    storage_base {
-        int
-        String
-        bytes
-    }
-    storage_extended {
-        prim
-        annots
-    }
+    storage_base
+    storage_extended
     big_map_diff { # [ContractBigMapDiffItem]
         key_hash
-        key { ... michelsonExpr }
-        value { ... michelsonExpr }
+        key
+        value
     }
     balance_updates { ... balanceUpdate }
     originated_contracts
@@ -369,8 +349,8 @@ fragment operationResultTransaction on OperationResultTransaction {
 export const contractField = `contract(address: "KT1MsoUy2Sunt5rBbvRGxKf2zDxHE9teRJw7") {
     balance
     script {
-        code { ... michelsonExpr }
-        storage { ... michelsonExpr }
+        code
+        storage
     }
     counter
     entrypoint {
@@ -380,7 +360,7 @@ export const contractField = `contract(address: "KT1MsoUy2Sunt5rBbvRGxKf2zDxHE9t
         key
         invalid
     }
-    storage { ... michelsonExpr }
+    storage
     delegate
 }`;
 
@@ -402,7 +382,7 @@ export const delegateField = `delegate(address: "tz1LcuQHNVQEWP2fZjk1QYZGNrfLDwr
 
 export async function testQuery(query: string) {
     var response = await axios.post(
-        "http://localhost:3000/graphql",
+        'http://localhost:3000/graphql',
         {
             query,
         },
@@ -421,7 +401,7 @@ export async function testQuery(query: string) {
 }
 
 export async function testBlock(block: string, additionalBlockFields: string[] = []) {
-    return await testQuery(`{ block(block: "${block}") { ${blockFields} ${additionalBlockFields.join(" ")} } } ${fragments}`);
+    return await testQuery(`{ block(block: "${block}") { ${blockFields} ${additionalBlockFields.join(' ')} } } ${fragments}`);
 }
 
 export async function testBlocksQuery(queryArguments: string) {
