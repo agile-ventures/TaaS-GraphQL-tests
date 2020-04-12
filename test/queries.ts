@@ -78,17 +78,15 @@ export const blockFields = `
             }
             internal_operation_results {
                 kind
-                info {
-                    source
-                    nonce
-                    amount
-                    destination
-                    parameters { ... parameters }
-                    public_key
-                    balance
-                    delegate
-                    script { ... scriptedContract }
-                }
+                source
+                nonce
+                amount
+                destination
+                parameters { ... parameters }
+                public_key
+                balance
+                delegate
+                script { ... scriptedContract }
                 result {
                     status
                     consumed_gas
@@ -147,17 +145,15 @@ export const blockFields = `
             operation_result { ... operationResultOrigination }
             internal_operation_results {
                 kind
-                info {
-                    source
-                    nonce
-                    amount
-                    destination
-                    parameters { ... parameters }
-                    public_key
-                    balance
-                    delegate
-                    script { ... scriptedContract }
-                }
+                source
+                nonce
+                amount
+                destination
+                parameters { ... parameters }
+                public_key
+                balance
+                delegate
+                script { ... scriptedContract }
                 result { ... operationResultOrigination }
             }
         }
@@ -182,20 +178,18 @@ export const blockFields = `
             balance_updates { ... balanceUpdate }
             internal_operation_results { # [InternalOperationResultReveal]
                 kind
-                info { # InternalOperationResultInfo
-                    source
-                    nonce
-                    amount
-                    destination
-                    parameters { ... parameters }
-                    public_key
-                    balance
-                    delegate
-                    script { ... scriptedContract }
-                }
-                result { ... operationResultReveal }
+                source
+                nonce
+                amount
+                destination
+                parameters { ... parameters }
+                public_key
+                balance
+                delegate
+                script { ... scriptedContract }
+                result { ... revealOperationResult }
             }
-            operation_result { ... operationResultReveal }
+            operation_result { ... revealOperationResult }
         }
         operation { ... operationInfo }
     }
@@ -223,17 +217,15 @@ export const blockFields = `
             operation_result { ... operationResultTransaction }
             internal_operation_results { # [InternalOperationResultTransaction]
                 kind
-                info {
-                    source
-                    nonce
-                    amount
-                    destination
-                    parameters { ... parameters }
-                    public_key
-                    balance
-                    delegate
-                    script { ... scriptedContract }
-                }
+                source
+                nonce
+                amount
+                destination
+                parameters { ... parameters }
+                public_key
+                balance
+                delegate
+                script { ... scriptedContract }
                 result { ... operationResultTransaction }
             }
         }
@@ -306,7 +298,7 @@ fragment scriptedContract on ScriptedContracts {
     storage
 }
 
-fragment operationResultReveal on OperationResultReveal {
+fragment revealOperationResult on RevealOperationResult {
     status
     consumed_gas
     errors {
