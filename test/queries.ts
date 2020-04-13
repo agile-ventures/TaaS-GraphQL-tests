@@ -142,7 +142,7 @@ export const blockFields = `
         }
         metadata {
             balance_updates { ... balanceUpdate }
-            operation_result { ... operationResultOrigination }
+            operation_result { ... originationOperationResult }
             internal_operation_results {
                 kind
                 source
@@ -154,7 +154,7 @@ export const blockFields = `
                 balance
                 delegate
                 script { ... scriptedContract }
-                result { ... operationResultOrigination }
+                result { ... originationOperationResult }
             }
         }
         operation { ... operationInfo }
@@ -275,7 +275,7 @@ fragment inlinedEndorsement on InlinedEndorsement {
     signature
 }
 
-fragment operationResultOrigination on OperationResultOrigination {
+fragment originationOperationResult on OriginationOperationResult {
     status
     consumed_gas
     errors {
