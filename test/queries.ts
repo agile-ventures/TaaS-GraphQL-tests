@@ -214,7 +214,7 @@ export const blockFields = `
         parameters
         metadata { # OperationContentsMetadataTransaction!
             balance_updates { ... balanceUpdate }
-            operation_result { ... operationResultTransaction }
+            operation_result { ... transactionOperationResult }
             internal_operation_results { # [InternalOperationResultTransaction]
                 kind
                 source
@@ -226,7 +226,7 @@ export const blockFields = `
                 balance
                 delegate
                 script { ... scriptedContract }
-                result { ... operationResultTransaction }
+                result { ... transactionOperationResult }
             }
         }
         operation { ... operationInfo }
@@ -307,15 +307,14 @@ fragment revealOperationResult on RevealOperationResult {
     }
 }
 
-fragment operationResultTransaction on OperationResultTransaction {
+fragment transactionOperationResult on TransactionOperationResult {
     status
     consumed_gas
     errors {
         kind
         id
     }
-    storage_base
-    storage_extended
+    storage
     big_map_diff { # [ContractBigMapDiffItem]
         key_hash
         key
