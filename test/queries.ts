@@ -335,8 +335,8 @@ export const contractField = `contract(address: "KT1MsoUy2Sunt5rBbvRGxKf2zDxHE9t
         storage
     }
     counter
-    entrypoint {
-    entrypoints
+    entrypoints {
+        entrypoints
     }
     manager_key {
         key
