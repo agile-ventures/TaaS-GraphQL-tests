@@ -1,4 +1,4 @@
-import { testBlock, contractField, delegateField } from './queries';
+import { testBlock, contractField, delegateField, bigMaps } from './queries';
 
 describe('GraphQL server compatibility layer', () => {
     beforeEach(() => {
@@ -11,8 +11,8 @@ describe('GraphQL server compatibility layer', () => {
     }
 
     describe('on recent data', () => {
-        itReturnsOkForBlock('head', 'latest protocol', [contractField, delegateField]);
-        itReturnsOkForBlock('896621', '006', [contractField, delegateField]);
+        itReturnsOkForBlock('head', 'latest protocol', [contractField, delegateField, bigMaps]);
+        itReturnsOkForBlock('896621', '006', [contractField, delegateField, bigMaps]);
     });
 
     describe('on starting blocks', () => {
@@ -31,8 +31,9 @@ describe('GraphQL server compatibility layer', () => {
 
     describe('on operation sample', () => {
         itReturnsOkForBlock('907464', '006');
-        itReturnsOkForBlock('907471', '006');
+        itReturnsOkForBlock('907471', '006', [bigMaps]);
         itReturnsOkForBlock('896065', '006', [contractField, delegateField]);
+        itReturnsOkForBlock('767840', '005', [bigMaps]);
         itReturnsOkForBlock('696617', '005', [contractField, delegateField]);
         itReturnsOkForBlock('554813', '004', [contractField, delegateField]);
         itReturnsOkForBlock('32959', '002', [contractField]);

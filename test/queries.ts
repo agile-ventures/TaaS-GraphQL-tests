@@ -362,6 +362,19 @@ export const delegateField = `delegate(address: "tz1LcuQHNVQEWP2fZjk1QYZGNrfLDwr
     }
 }`;
 
+export const bigMaps = `big_map_contract1: contract(address: "KT1EctCuorV2NfVb1XTQgvzJ88MQtWP8cMMv") {
+  big_map_value(key: "tz1WAVpSaCFtLQKSJkrdVApCQC1TNK8iNxq9", keyType: ADDRESS, bigMapId: 20)
+}
+  
+big_map_contract2: contract(address: "KT1ChNsEFxwyCbJyWGSL3KdjeXE28AY1Kaog") {
+  value1: big_map_value(key: "tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q", keyType: KEY_HASH, bigMapId: 17)
+  value2: big_map_value(key: "tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q", keyType: KEY_HASH)
+  big_map_value_decoded(key: "tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q")
+    
+  not_found1: big_map_value(key: "tz1WAVpSaCFtLQKSJkrdVApCQC1TNK8iNxq9", keyType: KEY_HASH, bigMapId: 17)
+  not_found2: big_map_value_decoded(key: "tz1WAVpSaCFtLQKSJkrdVApCQC1TNK8iNxq9")
+}`;
+
 export async function testQuery(query: string) {
     var response = await axios.post(
         'http://localhost:3000/graphql',
