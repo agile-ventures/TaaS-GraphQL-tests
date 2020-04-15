@@ -362,6 +362,19 @@ export const delegateField = `delegate(address: "tz1LcuQHNVQEWP2fZjk1QYZGNrfLDwr
     }
 }`;
 
+export const delegateWithBakingRightsField = `delegateWithBakingRights: delegate(address: "tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q") {
+  endorsing_rights(level: 892956) {
+    level
+    slots
+    estimated_time
+  }
+  baking_rights(level: 893408) {
+    level
+    priority
+    estimated_time
+  }
+}`;
+
 export const bigMaps = `big_map_contract1: contract(address: "KT1EctCuorV2NfVb1XTQgvzJ88MQtWP8cMMv") {
   big_map_value(key: "tz1WAVpSaCFtLQKSJkrdVApCQC1TNK8iNxq9", keyType: ADDRESS, bigMapId: 20)
 }
