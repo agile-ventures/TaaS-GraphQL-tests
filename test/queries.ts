@@ -375,6 +375,10 @@ big_map_contract2: contract(address: "KT1ChNsEFxwyCbJyWGSL3KdjeXE28AY1Kaog") {
   not_found2: big_map_value_decoded(key: "tz1WAVpSaCFtLQKSJkrdVApCQC1TNK8iNxq9")
 }`;
 
+export const constantsField = `constants {
+    endorsement_reward
+  }`;
+
 export async function testQuery(query: string) {
     var response = await axios.post(
         'http://localhost:3000/graphql',

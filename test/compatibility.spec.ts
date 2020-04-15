@@ -1,4 +1,4 @@
-import { testBlock, contractField, delegateField, bigMaps } from './queries';
+import { bigMaps, constantsField, contractField, delegateField, testBlock } from './queries';
 
 describe('GraphQL server compatibility layer', () => {
     beforeEach(() => {
@@ -40,5 +40,10 @@ describe('GraphQL server compatibility layer', () => {
         itReturnsOkForBlock('3425', '001', [contractField]);
         itReturnsOkForBlock('446', '001');
         itReturnsOkForBlock('379', '001');
+    });
+
+    describe('on constants', () => {
+        itReturnsOkForBlock('896065', '005', [constantsField]);
+        itReturnsOkForBlock('700000', '005', [constantsField]);
     });
 });
