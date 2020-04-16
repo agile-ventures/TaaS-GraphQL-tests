@@ -1,5 +1,5 @@
 # TaaS-GraphQL-tests
-Unit tests for TaaS GraphQL project
+Unit tests for [TaaS GraphQL](https://github.com/agile-ventures/TaaS-GraphQL) project
 
 ## Requirements
 
