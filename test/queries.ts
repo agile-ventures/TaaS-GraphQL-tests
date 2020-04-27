@@ -2,37 +2,37 @@ import axios, { AxiosResponse } from 'axios';
 
 export const blockFields = `
     protocol
-    chain_id
+    chainId
     hash
     header { ... blockHeader }
     metadata {
         protocol
-        next_protocol
-        test_chain_status {
+        nextProtocol
+        testChainStatus {
             status
         }
-        max_operations_ttl
-        max_operation_data_length
-        max_block_header_length
-        max_operation_list_length {
-            max_size
-            max_op
+        maxOperationsTtl
+        maxOperationDataLength
+        maxBlockHeaderLength
+        maxOperationListLength {
+            maxSize
+            maxOp
         }
         baker
         level {
             level
-            level_position
+            levelPosition
             cycle
-            cycle_position
-            voting_period
-            voting_period_position
-            expected_commitment
+            cyclePosition
+            votingPeriod
+            votingPeriodPosition
+            expectedCommitment
         }
-        voting_period_kind
-        nonce_hash
-        consumed_gas
+        votingPeriodKind
+        nonceHash
+        consumedGas
         deactivated
-        balance_updates { ... balanceUpdate }
+        balanceUpdates { ... balanceUpdate }
     }
     operations {
         info { ... operationInfo }
@@ -46,7 +46,7 @@ export const blockFields = `
         pkh
         secret
         metadata {
-            balance_updates { ... balanceUpdate }
+            balanceUpdates { ... balanceUpdate }
         }
         operation { ... operationInfo }
     }
@@ -63,33 +63,33 @@ export const blockFields = `
         source
         fee
         counter
-        gas_limit
-        storage_limit
+        gasLimit
+        storageLimit
         delegate
         metadata {
-            balance_updates { ... balanceUpdate }
-            operation_result {
+            balanceUpdates { ... balanceUpdate }
+            operationResult {
                 status
-                consumed_gas
+                consumedGas
                 errors {
                     kind
                     id
                 }
             }
-            internal_operation_results {
+            internalOperationResults {
                 kind
                 source
                 nonce
                 amount
                 destination
                 parameters { ... parameters }
-                public_key
+                publicKey
                 balance
                 delegate
                 script { ... scriptedContract }
                 result {
                     status
-                    consumed_gas
+                    consumedGas
                     errors {
                         kind
                         id
@@ -99,21 +99,21 @@ export const blockFields = `
         }
         operation { ... operationInfo }
     }
-    double_baking_evidence {
+    doubleBakingEvidence {
         kind
         bh1 { ... blockHeader }
         bh2 { ... blockHeader }
         metadata {
-            balance_updates { ... balanceUpdate }
+            balanceUpdates { ... balanceUpdate }
         }
         operation { ... operationInfo }
     }
-    double_endorsement_evidence {
+    doubleEndorsementEvidence {
         kind
         op1 { ... inlinedEndorsement }
         op2 { ... inlinedEndorsement }
         metadata {
-            balance_updates { ... balanceUpdate }
+            balanceUpdates { ... balanceUpdate }
         }
         operation { ... operationInfo }
     }
@@ -121,7 +121,7 @@ export const blockFields = `
         kind
         level
         metadata {
-            balance_updates { ... balanceUpdate }
+            balanceUpdates { ... balanceUpdate }
             delegate
             slots
         }
@@ -132,8 +132,8 @@ export const blockFields = `
         source
         fee
         counter
-        gas_limit
-        storage_limit
+        gasLimit
+        storageLimit
         balance
         delegate
         script {
@@ -141,16 +141,16 @@ export const blockFields = `
             storage
         }
         metadata {
-            balance_updates { ... balanceUpdate }
-            operation_result { ... originationOperationResult }
-            internal_operation_results {
+            balanceUpdates { ... balanceUpdate }
+            operationResult { ... originationOperationResult }
+            internalOperationResults {
                 kind
                 source
                 nonce
                 amount
                 destination
                 parameters { ... parameters }
-                public_key
+                publicKey
                 balance
                 delegate
                 script { ... scriptedContract }
@@ -171,34 +171,34 @@ export const blockFields = `
         source
         fee
         counter
-        gas_limit
-        storage_limit
-        public_key
+        gasLimit
+        storageLimit
+        publicKey
         metadata { # OperationContentsMetadataReveal!
-            balance_updates { ... balanceUpdate }
-            internal_operation_results { # [InternalOperationResultReveal]
+            balanceUpdates { ... balanceUpdate }
+            internalOperationResults { # [InternalOperationResultReveal]
                 kind
                 source
                 nonce
                 amount
                 destination
                 parameters { ... parameters }
-                public_key
+                publicKey
                 balance
                 delegate
                 script { ... scriptedContract }
                 result { ... revealOperationResult }
             }
-            operation_result { ... revealOperationResult }
+            operationResult { ... revealOperationResult }
         }
         operation { ... operationInfo }
     }
-    seed_nonce_revelations { # [OperationContentsSeedNonceRevelation]!
+    seedNonceRevelations { # [OperationContentsSeedNonceRevelation]!
         kind
         level
         nonce
         metadata { # OperationContentsMetadata!
-            balance_updates { ... balanceUpdate }
+            balanceUpdates { ... balanceUpdate }
         }
         operation { ... operationInfo }
     }
@@ -207,22 +207,22 @@ export const blockFields = `
         source
         fee
         counter
-        gas_limit
-        storage_limit
+        gasLimit
+        storageLimit
         amount
         destination
         parameters
         metadata { # OperationContentsMetadataTransaction!
-            balance_updates { ... balanceUpdate }
-            operation_result { ... transactionOperationResult }
-            internal_operation_results { # [InternalOperationResultTransaction]
+            balanceUpdates { ... balanceUpdate }
+            operationResult { ... transactionOperationResult }
+            internalOperationResults { # [InternalOperationResultTransaction]
                 kind
                 source
                 nonce
                 amount
                 destination
                 parameters { ... parameters }
-                public_key
+                publicKey
                 balance
                 delegate
                 script { ... scriptedContract }
@@ -236,7 +236,7 @@ export const blockFields = `
 export const fragments = `
 fragment operationInfo on OperationEntryInfo {
     protocol
-    chain_id
+    chainId
     hash
     branch
     signature
@@ -247,13 +247,13 @@ fragment blockHeader on BlockHeader {
     proto
     predecessor
     timestamp
-    validation_pass
-    operations_hash
+    validationPass
+    operationsHash
     fitness
     context
     priority
-    proof_of_work_nonce
-    seed_nonce_hash
+    proofOfWorkNonce
+    seedNonceHash
     signature
 }
 
@@ -277,15 +277,15 @@ fragment inlinedEndorsement on InlinedEndorsement {
 
 fragment originationOperationResult on OriginationOperationResult {
     status
-    consumed_gas
+    consumedGas
     errors {
         kind
         id
     }
-    balance_updates  { ... balanceUpdate }
-    originated_contracts
-    storage_size
-    paid_storage_size_diff
+    balanceUpdates  { ... balanceUpdate }
+    originatedContracts
+    storageSize
+    paidStorageSizeDiff
 }
 
 fragment parameters on TransactionOperationParameter {
@@ -300,7 +300,7 @@ fragment scriptedContract on ScriptedContracts {
 
 fragment revealOperationResult on RevealOperationResult {
     status
-    consumed_gas
+    consumedGas
     errors {
         kind
         id
@@ -309,22 +309,22 @@ fragment revealOperationResult on RevealOperationResult {
 
 fragment transactionOperationResult on TransactionOperationResult {
     status
-    consumed_gas
+    consumedGas
     errors {
         kind
         id
     }
     storage
-    big_map_diff { # [ContractBigMapDiffItem]
-        key_hash
+    bigMapDiff { # [ContractBigMapDiffItem]
+        keyHash
         key
         value
     }
-    balance_updates { ... balanceUpdate }
-    originated_contracts
-    storage_size
-    paid_storage_size_diff
-    allocated_destination_contract
+    balanceUpdates { ... balanceUpdate }
+    originatedContracts
+    storageSize
+    paidStorageSizeDiff
+    allocatedDestinationContract
 }
 `;
 
@@ -338,7 +338,7 @@ export const contractField = `contract(address: "KT1MsoUy2Sunt5rBbvRGxKf2zDxHE9t
     entrypoints {
         entrypoints
     }
-    manager_key {
+    managerKey {
         key
         invalid
     }
@@ -348,13 +348,13 @@ export const contractField = `contract(address: "KT1MsoUy2Sunt5rBbvRGxKf2zDxHE9t
 
 export const delegateField = `delegate(address: "tz1LcuQHNVQEWP2fZjk1QYZGNrfLDwrT3SyZ") {
     balance
-    frozen_balance
-    staking_balance
-    delegated_contracts
-    delegated_balance
+    frozenBalance
+    stakingBalance
+    delegatedContracts
+    delegatedBalance
     deactivated
-    grace_period
-    frozen_balance_by_cycle {
+    gracePeriod
+    frozenBalanceByCycle {
         cycle
         deposit
         fees
@@ -363,33 +363,33 @@ export const delegateField = `delegate(address: "tz1LcuQHNVQEWP2fZjk1QYZGNrfLDwr
 }`;
 
 export const delegateWithBakingRightsField = `delegateWithBakingRights: delegate(address: "tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q") {
-  endorsing_rights(level: 892956) {
+  endorsingRights(level: 892956) {
     level
     slots
-    estimated_time
+    estimatedTime
   }
-  baking_rights(level: 893408) {
+  bakingRights(level: 893408) {
     level
     priority
-    estimated_time
+    estimatedTime
   }
 }`;
 
-export const bigMaps = `big_map_contract1: contract(address: "KT1EctCuorV2NfVb1XTQgvzJ88MQtWP8cMMv") {
-  big_map_value(key: "tz1WAVpSaCFtLQKSJkrdVApCQC1TNK8iNxq9", keyType: ADDRESS, bigMapId: 20)
+export const bigMaps = `bigMapContract1: contract(address: "KT1EctCuorV2NfVb1XTQgvzJ88MQtWP8cMMv") {
+  bigMapValue(key: "tz1WAVpSaCFtLQKSJkrdVApCQC1TNK8iNxq9", keyType: ADDRESS, bigMapId: 20)
 }
   
-big_map_contract2: contract(address: "KT1ChNsEFxwyCbJyWGSL3KdjeXE28AY1Kaog") {
-  value1: big_map_value(key: "tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q", keyType: KEY_HASH, bigMapId: 17)
-  value2: big_map_value(key: "tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q", keyType: KEY_HASH)
-  big_map_value_decoded(key: "tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q")
+bigMapContract2: contract(address: "KT1ChNsEFxwyCbJyWGSL3KdjeXE28AY1Kaog") {
+  value1: bigMapValue(key: "tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q", keyType: KEY_HASH, bigMapId: 17)
+  value2: bigMapValue(key: "tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q", keyType: KEY_HASH)
+  bigMapValueDecoded(key: "tz1WCd2jm4uSt4vntk4vSuUWoZQGhLcDuR9q")
     
-  not_found1: big_map_value(key: "tz1WAVpSaCFtLQKSJkrdVApCQC1TNK8iNxq9", keyType: KEY_HASH, bigMapId: 17)
-  not_found2: big_map_value_decoded(key: "tz1WAVpSaCFtLQKSJkrdVApCQC1TNK8iNxq9")
+  notFound1: bigMapValue(key: "tz1WAVpSaCFtLQKSJkrdVApCQC1TNK8iNxq9", keyType: KEY_HASH, bigMapId: 17)
+  notFound2: bigMapValueDecoded(key: "tz1WAVpSaCFtLQKSJkrdVApCQC1TNK8iNxq9")
 }`;
 
 export const constantsField = `constants {
-    endorsement_reward
+    endorsementReward
   }`;
 
 export async function testQuery(query: string) {
