@@ -412,8 +412,8 @@ export async function testQuery(query: string) {
     return response;
 }
 
-export async function testBlock(block: string, additionalBlockFields: string[] = []) {
-    return await testQuery(`{ block(block: "${block}") { ${blockFields} ${additionalBlockFields.join(' ')} } } ${fragments}`);
+export async function testBlock(block: any, additionalBlockFields: string[] = []) {
+    return await testQuery(`{ block(block: ${isNaN(block) ? `"${block}"` : block}) { ${blockFields} ${additionalBlockFields.join(' ')} } } ${fragments}`);
 }
 
 export async function testBlocksQuery(queryArguments: string) {

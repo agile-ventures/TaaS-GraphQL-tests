@@ -1,6 +1,7 @@
-import { testQuery, blockFields, testBlocksQuery } from './queries';
-import { union } from 'lodash';
 import { AxiosResponse } from 'axios';
+import { union } from 'lodash';
+
+import { testBlocksQuery } from './queries';
 
 describe('GraphQL server query', () => {
     beforeEach(() => {
@@ -27,7 +28,7 @@ describe('GraphQL server query', () => {
         itReturnsBlockCount('to: "head~10", count: 5', 5);
         itReturnsBlockCount('from: "BKmkM6MrPSzG6Y97UjRopWWBafJFYgKXby3e18inY4gdPY1KB7b", count: 5', 5);
         itReturnsBlockCount('to: "BKmkM6MrPSzG6Y97UjRopWWBafJFYgKXby3e18inY4gdPY1KB7b", count: 5', 5);
-        itReturnsBlockCount('from: "895970", count: 5', 5);
-        itReturnsBlockCount('to: "895970", count: 5', 5);
+        itReturnsBlockCount('from: 895970, count: 5', 5);
+        itReturnsBlockCount('to: 895970, count: 5', 5);
     });
 });
