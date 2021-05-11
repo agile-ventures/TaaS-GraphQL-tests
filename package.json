@@ -16,7 +16,7 @@
         "axios": "^0.19.2",
         "jasmine": "^3.5.0",
         "jasmine-console-reporter": "^3.1.0",
-        "lodash": "^4.17.15",
+        "lodash": "^4.17.21",
         "ts-node": "^8.6.2",
         "typescript": "^3.7.5"
     },
